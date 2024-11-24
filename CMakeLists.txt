@@ -7,9 +7,25 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
+find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(rosbag2_cpp REQUIRED)
+
+include_directories(${PROJECT_SOURCE_DIR}/lib)
+
+add_executable(walker_algo src/walker.cpp)
+ament_target_dependencies(walker_algo rclcpp std_msgs sensor_msgs geometry_msgs)
+add_executable(ros_bag_recorder src/ros_bag_recorder.cpp)
+ament_target_dependencies(ros_bag_recorder rclcpp rosbag2_cpp std_msgs geometry_msgs)
+
+install(TARGETS
+  walker_algo
+  ros_bag_recorder
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -19,6 +35,14 @@ if(BUILD_TESTING)
   # the following line skips cpplint (only works in a git repo)
   # comment the line when this package is in a git repo and when
   # a copyright and license is added to all source files
+
+install(DIRECTORY
+  launch
+  models
+  worlds
+  urdf
+  DESTINATION share/${PROJECT_NAME}/
+)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
