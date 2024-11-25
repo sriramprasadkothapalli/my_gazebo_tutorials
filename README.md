@@ -73,4 +73,3 @@ ros2 bag play my_bag
 cd ~/ros2_ws/src/walker
 bash cpplint.sh
 ```
->>>>>>> a4db68f (Modified readme and added .gitignore file)
